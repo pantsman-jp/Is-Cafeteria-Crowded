@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>食堂混雑予想</title>
+    <script src="static/index.js"></script>
+</head>
+
+<body>
+    <h1>食堂混雑</h1>
+    <p>現在の混雑状況（直近 n 分）</p>
+    <p>混雑予想</p>
+    <p>現在の混雑状況を教えてください。</p>
+    <form method="post">
+        <input type="radio" name="state" value="1" required>閑散
+        <input type="radio" name="state" value="2" required>普通
+        <input type="radio" name="state" value="3" required>混雑
+        <input type="submit" value="vote" onclick="appreciate()">
+    </form>
+    <hr>
+    <footer>
+        programmed by pantsman | {{ ver }}
+    </footer>
+</body>
+
+</html>
