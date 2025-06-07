@@ -15,12 +15,7 @@ def index():
 
 
 def start_server(debug):
-    app.run(host="localhost", debug=debug)
-
-
-def start_server2(debug):
-    app.run(host="0.0.0.0", port=5000, debug=debug)
+    app.run(host="0.0.0.0", port=5050, debug=debug)
 
 
 start_server(debug)
-# start_server2(debug)
