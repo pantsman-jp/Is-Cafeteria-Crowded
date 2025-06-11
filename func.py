@@ -1,10 +1,6 @@
 # from jpholiday import is_holiday
 from datetime import datetime, date
 from sqlite3 import connect
-import os
-
-
-db_path = os.path.join(os.path.dirname(__file__), "cafeteria_status.db")
 
 
 def get_hhmm():
@@ -39,12 +35,12 @@ def timestamp():
 
 
 def make_db():
-    conn = connect(db_path)
+    conn = connect("cafeteria_status.db")
     conn.close()
 
 
 def make_table():
-    conn = connect(db_path)
+    conn = connect("cafeteria_status.db")
     cur = conn.cursor()
     cur.execute(
         "CREATE TABLE vote (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT NOT NULL, ip TEXT NOT NULL, status INTEGER NOT NULL)"
@@ -54,11 +50,11 @@ def make_table():
 
 
 def insert(ipaddr, state):
-    conn = connect(db_path)
+    conn = connect("cafeteria_status.db")
     cur = conn.cursor()
     cur.execute(
         "INSERT INTO vote (timestamp, ip, status) VALUES (?, ?, ?)",
-        (timestamp(), ipaddr, state),
+        (timestamp(), ipaddr, int(state)),
     )
     conn.commit()
     cur.close()
@@ -66,7 +62,7 @@ def insert(ipaddr, state):
 
 
 def print_table():
-    conn = connect(db_path)
+    conn = connect("cafeteria_status.db")
     cur = conn.cursor()
     cur.execute("SELECT * FROM vote")
     print(cur.fetchall())
