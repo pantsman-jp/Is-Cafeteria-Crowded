@@ -1,9 +1,9 @@
 # | CHANGELOG
 
 ## Unreleased
+- setup db
 - show status of last few minutes
 - show forecast
-- change CSV to sqlite?
 - limit number of votes
 
 ## v0.1.0 (2025-05-31)

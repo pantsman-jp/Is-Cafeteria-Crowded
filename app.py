@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from func import write_csv
+from func import insert, print_table
 
 
 app = Flask("cafeteria-status")
@@ -10,7 +10,10 @@ debug = True
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        write_csv(request.remote_addr, request.form.get("state"))
+        print("POST received")
+        print(request.form.get("state"))
+        insert(request.remote_addr, int(request.form.get("state")))
+        print_table()
     return render_template("layout.html", ver=ver)
 
 
