@@ -1,28 +1,21 @@
 from flask import Flask, render_template, request
-from func import insert, print_table
+from func import insert, get_avg
 
 
 app = Flask("cafeteria-status")
-ver = "v0.1.0"
-debug = True
+ver = "v0.2.0"
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        print("POST received")
-        print(request.form.get("state"))
-        try:
-            insert(request.remote_addr, int(request.form.get("state")))
-            print_table()
-        except Exception:
-            raise Exception("Insert error")
-    return render_template("layout.html", ver=ver)
+        insert(request.remote_addr, int(request.form.get("state")))
+    return render_template("layout.html", ver=ver, avg=get_avg(10))
 
 
-def start_server(debug):
-    app.run(host="0.0.0.0", port=5050, debug=debug)
+def start_server():
+    app.run(host="0.0.0.0", port=5050, debug=True)
 
 
 if __name__ == "__main__":
-    start_server(debug)
+    start_server()

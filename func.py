@@ -1,15 +1,15 @@
 # from jpholiday import is_holiday
-from datetime import datetime, date
+from datetime import datetime, date, timezone, timedelta
 from sqlite3 import connect
 
 
 def get_hhmm():
-    hhmm = str(datetime.now())
+    """
+    get current time(JST)
+    by pantsman
+    """
+    hhmm = str(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))))
     return [int(hhmm[11:13]), int(hhmm[14:16])]
-
-
-def get_hour():
-    return get_hhmm()[0]
 
 
 def split_ymd(ymd=str(date.today())):
@@ -30,8 +30,8 @@ def split_ymd(ymd=str(date.today())):
 
 
 def timestamp():
-    """`yyyy-mm-dd hh:mm:ss"""
-    return str(datetime.now())[:19]
+    """yyyy-mm-dd hh:mm:ss"""
+    return str(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))))[:19]
 
 
 def make_db():
@@ -70,6 +70,22 @@ def print_table():
     conn.close()
 
 
+def get_avg(min):
+    conn = connect("cafeteria_status.db")
+    cur = conn.cursor()
+    now = datetime.now()
+    past_10min = now - timedelta(min)
+    cur.execute(
+        "SELECT AVG(status) FROM vote WHERE timestamp >= ?",
+        (past_10min.strftime("%Y-%m-%d %H:%M:%S"),),
+    )
+    avg = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return avg
+
+
 # print(timestamp(), split_ymd(), get_type())
 # print(timestamp())
 # print_table()
+# print(get_avg(10))

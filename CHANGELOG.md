@@ -1,10 +1,12 @@
-# | CHANGELOG
+# Is-Cafeteria-Crowded | CHANGELOG
 
 ## Unreleased
-- setup db
-- show status of last few minutes
 - show forecast
 - limit number of votes
+
+## v0.2.0 (205-06-11)
+- replace csv to sqlite
+- show recent status
 
 ## v0.1.0 (2025-05-31)
 - button to vote status
