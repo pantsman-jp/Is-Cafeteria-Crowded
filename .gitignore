@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 memo.md
 cafeteria_status.db
+.vscode
