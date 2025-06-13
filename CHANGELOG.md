@@ -3,8 +3,12 @@
 ## Unreleased
 - show forecast
 - limit number of votes
+- Fix Dockerfile
 
-## v0.2.0 (205-06-11)
+## v0.2.1 (2025-06-13)
+- fix bug: status of the last 10 minutes was not displayed
+
+## v0.2.0 (2025-06-11)
 - replace csv to sqlite
 - show recent status
 

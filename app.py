@@ -3,7 +3,7 @@ from func import insert, get_avg
 
 
 app = Flask("cafeteria-status")
-ver = "v0.2.0"
+ver = "v0.2.1"
 
 
 @app.route("/", methods=["GET", "POST"])

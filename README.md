@@ -1,6 +1,6 @@
 # Is_Cafeteria_Crowded / pantsman
 
-`This Project Is UNDERCONSTRUCTION`
+`This Project Is UNDER CONSTRUCTION`
 
 Users on Kyutech campus can vote on how crowded the cafeteria is.
 And users can see real-time and predicted congestion by time of day.
@@ -14,12 +14,12 @@ Install from <https://github.com/pantsman-jp/Is-Cafeteria-Crowded>
 - Make
 
 ### Build Docker image
-```shell
+```
 make build
 ```
 
 ### Run app
-```shell
+```
 make run
 ```
 

@@ -3,12 +3,16 @@ from datetime import datetime, date, timezone, timedelta
 from sqlite3 import connect
 
 
+def get_jst():
+    return datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9)))
+
+
 def get_hhmm():
     """
     get current time(JST)
     by pantsman
     """
-    hhmm = str(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))))
+    hhmm = str(get_jst())
     return [int(hhmm[11:13]), int(hhmm[14:16])]
 
 
@@ -31,7 +35,7 @@ def split_ymd(ymd=str(date.today())):
 
 def timestamp():
     """yyyy-mm-dd hh:mm:ss"""
-    return str(datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=9))))[:19]
+    return str(get_jst())[:19]
 
 
 def make_db():
@@ -73,11 +77,9 @@ def print_table():
 def get_avg(min):
     conn = connect("cafeteria_status.db")
     cur = conn.cursor()
-    now = datetime.now()
-    past_10min = now - timedelta(min)
     cur.execute(
         "SELECT AVG(status) FROM vote WHERE timestamp >= ?",
-        (past_10min.strftime("%Y-%m-%d %H:%M:%S"),),
+        ((get_jst() - timedelta(minutes=min)).strftime("%Y-%m-%d %H:%M:%S"),),
     )
     avg = cur.fetchone()[0]
     cur.close()
