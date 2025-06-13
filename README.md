@@ -19,6 +19,22 @@ make build
 ```
 
 ### Run app
+To specify a port number, change the port number in `Makefile` and `app.py`.
+
+Makefile
+```Makefile
+run:
+	docker run --rm -p port:port \
+		-v $(PWD)/cafeteria_status.db:/app/cafeteria_status.db \
+		is-cafe-crowded
+```
+app.py
+```Python app.py
+port = 5004
+if __name__ == "__main__":
+    start_server(port=port)
+```
+Then run app.
 ```
 make run
 ```

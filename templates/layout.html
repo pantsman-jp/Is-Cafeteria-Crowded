@@ -7,15 +7,18 @@
 </head>
 
 <body>
-    <h1>食堂混雑</h1>
+    <h1>食堂混雑状況</h1>
+    <hr>
     <h3>現在の混雑状況</h3>
-    {% if avg == None%}
-        <p>直近10分のデータがありません。</p>
-    {% else %}
-        <p>現在の混雑状況（直近10分の平均）：{{ avg }}</p>
-    {% endif %}
-    <p>混雑予想</p>
-    <p>現在の混雑状況を教えてください。</p>
+    <p>現在の混雑状況（直近10分の平均）：{{ avg }}</p>
+    <br>
+    <h3>混雑予想（直近の投稿に基づく）</h3>
+    <p>{{ trend }}</p>
+    <br>
+    <h3>混雑予想（過去の同曜日の投稿に基づく）</h3>
+    <p></p>
+    <br>
+    <h3>現在の混雑状況を教えてください。</h3>
     <form method="post">
         <input type="radio" name="state" value="1" required> 空いてる
         <input type="radio" name="state" value="2" required> 普通

@@ -5,6 +5,9 @@
 - limit number of votes
 - Fix Dockerfile
 
+## v0.3.0 (2025-06-13)
+- show congestion forecast based on most recent postings
+
 ## v0.2.1 (2025-06-13)
 - fix bug: status of the last 10 minutes was not displayed
 
