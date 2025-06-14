@@ -1,4 +1,4 @@
-from jpholiday import is_holiday
+# from jpholiday import is_holiday
 from datetime import datetime, date, timezone, timedelta
 from sqlite3 import connect
 
@@ -10,6 +10,7 @@ def get_jst():
 def get_hhmm():
     """
     get current time(JST)
+    return [hour, min]
     by pantsman
     """
     hhmm = str(get_jst())
@@ -21,31 +22,16 @@ def split_ymd(ymd=str(get_jst())[:10]):
     return [int(x) for x in ymd.split("-")]
 
 
-def get_type(ymd=split_ymd()):
-    today = date(ymd[0], ymd[1], ymd[2])
-    if is_holiday(today):
-        return 6
-    return today.weekday()
+# def get_type(ymd=split_ymd()):
+#     today = date(ymd[0], ymd[1], ymd[2])
+#     if is_holiday(today):
+#         return 6
+#     return today.weekday()
 
 
 def timestamp():
     """yyyy-mm-dd hh:mm:ss"""
     return str(get_jst())[:19]
-
-
-def make_db():
-    conn = connect("cafeteria_status.db")
-    conn.close()
-
-
-def make_table():
-    conn = connect("cafeteria_status.db")
-    cur = conn.cursor()
-    cur.execute(
-        "CREATE TABLE vote (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT NOT NULL, ip TEXT NOT NULL, status INTEGER NOT NULL)"
-    )
-    conn.commit()
-    conn.close()
 
 
 def insert(ipaddr, state):
@@ -70,7 +56,7 @@ def print_table():
 
 
 def classify(n):
-    if n is None:
+    if n == 0:
         return "情報なし"
     if n <= 1.5:
         return "空いている"
@@ -79,30 +65,42 @@ def classify(n):
     return "普通"
 
 
-def get_avg(min):
-    """recent status"""
+def calc_time(now, min):
+    return (now - timedelta(minutes=min)).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_avg(m1, m2):
+    """
+    take average from m1 min before to m2 min before.
+    m1 must be greater than m2
+    """
     conn = connect("cafeteria_status.db")
     cur = conn.cursor()
+    now = get_jst()
     cur.execute(
-        "SELECT AVG(status) FROM vote WHERE timestamp >= ?",
-        ((get_jst() - timedelta(minutes=min)).strftime("%Y-%m-%d %H:%M:%S"),),
+        "SELECT AVG(status) FROM vote WHERE timestamp >= ? AND timestamp <= ?",
+        (calc_time(now, m1), calc_time(now, m2)),
     )
     ret = cur.fetchone()[0]
     cur.close()
     conn.close()
+    if ret is None:
+        return 0
     return ret
 
 
-def get_trend():
-    now, before = get_avg(10), get_avg(20)
-    if (now is None) or (before is None):
-        return "情報不足です"
-    diff = now - before
-    if diff > 0.3:
+def is_enough_data(xs, threshold):
+    return len([x for x in xs if x == 0]) > threshold
+
+
+def get_trend(min):
+    data = [get_avg(m, m - 1) for m in range(min, 0, -1)]
+    if is_enough_data(data, 6):
+        return "情報不足"
+    diff = [x - y for (x, y) in zip(data, data[1:])]
+    trend = sum(diff) / len(diff)
+    if trend > 0.3:
         return "これから混み始めるでしょう"
-    if diff < -0.3:
+    if trend < -0.3:
         return "これから空き始めるでしょう"
     return "混雑状況に変化はないでしょう"
-
-
-# print(get_avg(10))

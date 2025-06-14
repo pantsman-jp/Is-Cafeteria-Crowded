@@ -5,6 +5,9 @@
 - limit number of votes
 - Fix Dockerfile
 
+## v0.4.0 (2025-06-14)
+- change algorithm in prediction based on most recent postings
+
 ## v0.3.0 (2025-06-13)
 - show congestion forecast based on most recent postings
 

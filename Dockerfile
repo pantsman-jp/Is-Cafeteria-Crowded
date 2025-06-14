@@ -6,6 +6,4 @@ COPY . /app
 
 RUN pip install flask jpholiday
 
-# RUN python init_db.py
-
 CMD ["python", "app.py"]
