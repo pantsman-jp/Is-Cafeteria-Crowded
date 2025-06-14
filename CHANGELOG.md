@@ -1,15 +1,13 @@
 # Is-Cafeteria-Crowded | CHANGELOG
 
 ## Unreleased
-- show forecast
 - limit number of votes
-- Fix Dockerfile
 
 ## v0.4.0 (2025-06-14)
-- change algorithm in prediction based on most recent postings
+- change algorithm in prediction based on most recent vote
 
 ## v0.3.0 (2025-06-13)
-- show congestion forecast based on most recent postings
+- show congestion forecast based on most recent vote
 
 ## v0.2.1 (2025-06-13)
 - fix bug: status of the last 10 minutes was not displayed
