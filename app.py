@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
-from func import insert, get_avg, get_trend, classify
+from func import insert, get_avg_recent, get_trend, classify, predict_congestion
 
 
 app = Flask("cafeteria-status")
-ver = "v0.4.0"
+ver = "v0.5.0"
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -11,7 +11,11 @@ def index():
     if request.method == "POST":
         insert(request.remote_addr, int(request.form.get("state")))
     return render_template(
-        "layout.html", ver=ver, avg=classify(get_avg(10, 0)), trend=get_trend(10)
+        "layout.html",
+        ver=ver,
+        avg=classify(get_avg_recent(10, 0)),
+        trend=get_trend(10),
+        hysteresis=predict_congestion(),
     )
 
 

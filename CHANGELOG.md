@@ -3,6 +3,9 @@
 ## Unreleased
 - limit number of votes
 
+## v0.5.0 (2025-06-23)
+- show congestion forecasts based on historical data
+
 ## v0.4.0 (2025-06-14)
 - change algorithm in prediction based on most recent vote
 

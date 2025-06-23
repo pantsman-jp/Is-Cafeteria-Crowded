@@ -1,4 +1,4 @@
-# from jpholiday import is_holiday
+from jpholiday import is_holiday
 from datetime import datetime, date, timezone, timedelta
 from sqlite3 import connect
 
@@ -22,11 +22,11 @@ def split_ymd(ymd=str(get_jst())[:10]):
     return [int(x) for x in ymd.split("-")]
 
 
-# def get_type(ymd=split_ymd()):
-#     today = date(ymd[0], ymd[1], ymd[2])
-#     if is_holiday(today):
-#         return 6
-#     return today.weekday()
+def get_type(ymd=split_ymd()):
+    today = date(ymd[0], ymd[1], ymd[2])
+    if is_holiday(today):
+        return 6
+    return today.weekday()
 
 
 def timestamp():
@@ -69,7 +69,7 @@ def calc_time(now, min):
     return (now - timedelta(minutes=min)).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def get_avg(m1, m2):
+def get_avg_recent(m1, m2):
     """
     take average from m1 min before to m2 min before.
     m1 must be greater than m2
@@ -93,14 +93,41 @@ def is_enough_data(xs, threshold):
     return len([x for x in xs if x == 0]) > threshold
 
 
-def get_trend(min):
-    data = [get_avg(m, m - 1) for m in range(min, 0, -1)]
-    if is_enough_data(data, 6):
-        return "情報不足"
-    diff = [x - y for (x, y) in zip(data, data[1:])]
-    trend = sum(diff) / len(diff)
+def predict(trend):
     if trend > 0.3:
         return "これから混み始めるでしょう"
     if trend < -0.3:
         return "これから空き始めるでしょう"
     return "混雑状況に変化はないでしょう"
+
+
+def get_trend(min):
+    data = [get_avg_recent(m, m - 1) for m in range(min, 0, -1)]
+    if is_enough_data(data, 6):
+        return "予測に十分なデータがありません"
+    diff = [x - y for (x, y) in zip(data, data[1:])]
+    return predict(sum(diff) / len(diff))
+
+
+def predict_congestion(window=15, min_votes=3):
+    conn = connect("cafeteria_status.db")
+    cur = conn.cursor()
+    cur.execute("SELECT status, timestamp FROM vote")
+    votes = cur.fetchall()
+    cur.close()
+    conn.close()
+    matched = []
+    current_min = get_hhmm()[0] * 60 + get_hhmm()[1]
+    dtype = get_type()
+    for status, ts in votes:
+        try:
+            t = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            continue
+        if get_type(split_ymd(str(t)[:10])) != dtype:
+            continue
+        if abs(t.hour * 60 + t.minute - current_min) <= window:
+            matched.append(status)
+    if len(matched) < min_votes:
+        return "予測に十分なデータがありません"
+    return predict(sum(matched) / len(matched))
