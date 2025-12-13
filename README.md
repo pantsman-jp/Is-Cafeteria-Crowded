@@ -1,7 +1,11 @@
 # Is_Cafeteria_Crowded / pantsman
 
-Users on Kyutech campus can vote on how crowded the cafeteria is.
-And users can see real-time and predicted congestion by time of day.
+## Overview
+Kyushu Institute of Technology's cafeteria is known for having extremely crowded periods.
+If possible, you would prefer to use the cafeteria during less busy times.
+
+Therefore, I developed a web application that allows cafeteria users to vote on crowding levels,
+enabling real-time and predicted crowding status checks for each time slot.
 
 ## Installation
 Download from https://github.com/pantsman-jp/Is-Cafeteria-Crowded.
